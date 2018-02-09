@@ -40,42 +40,23 @@
                     <ul class="nav navbar-nav">
                         @auth
 
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Search contacts <span class="caret"></span>
-                            </a>
+                        {{--<li class="dropdown">--}}
+                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">--}}
+                                {{--Search contacts <span class="caret"></span>--}}
+                            {{--</a>--}}
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('search-contacts.index') }}">Search </a></li>
-                                <li><a href="{{ route('url-list.index') }}">Url List</a></li>
-                            </ul>
-                        </li>
-
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Google search parsing <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('parse') }}">Parsing through serpstat</a></li>
-                                <li><a href="{{ route('parse-curl') }}">Parsing directly</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Site Checker <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('projects') }}">Projects</a></li>
-                                {{--<li><a href="{{ route('check') }}">Check</a></li>--}}
-                            </ul>
-                        </li>
+                            {{--<ul class="dropdown-menu" role="menu">--}}
+                                {{--<li><a href="{{ route('search-contacts.index') }}">Search </a></li>--}}
+                                {{--<li><a href="{{ route('url-list.index') }}">Url List</a></li>--}}
+                            {{--</ul>--}}
+                        {{--</li>--}}
 
 
+
+                        @ifUserIs('admin')
                         <li><a href="{{ route('users') }}">Users</a></li>
+                        <li><a href="{{ route('roles') }}">Roles</a></li>
+                        @endif
                         {{--<li><a href="{{ route('webmaster.index') }}">Webmasters</a></li>--}}
                         @endauth
                     </ul>

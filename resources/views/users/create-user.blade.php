@@ -4,7 +4,8 @@
   Create New User
 @endsection
 
-@section('template_fastload_css')
+@section('template_linked_css')
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
 @endsection
 
 @section('content')
@@ -23,76 +24,69 @@
 
         <div class="personal_information col-lg-12">
           <div class="site_info_add">
-            <div class="personal_block_img col-lg-3 ">
-              <div class="personal_block_img_body">
-                <img id="holder" style="width: 198px;
-    height: 198px;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 20px;" src="/img/bg_user_icon.png">
-
-                <p class="user_name"></p>
-                <div class="file-upload">
-
-                       <span class="input_file">
-                         <a id="main_image" data-input="main_image_thumb" data-preview="holder" class="">
-                          Загрузить
-                         </a>
-                       </span>
-                  <input id="main_image_thumb" class="form-control" type="text" name="image" style="display: none" value="">
-
-                </div>
-                <!--<button type="file">Загрузить</button>-->
-
-              </div>
-            </div>
             <div class="personal_block_info col-lg-8 col-lg-offset-1">
 
-              <h3>Основные данные</h3>
+              <h3>Main information</h3>
               <div class="row">
                 <div class="name col-lg-4">
-                  Имя
+                  Name
                 </div>
                 <div class="input_block col-lg-8">
-                  {!! Form::text('name', old('name'), array('id' => 'user-name', 'class' => 'form-control', 'placeholder' =>'Введите имя и фамилию')) !!}
+                  {!! Form::text('name', old('name'), array('id' => 'user-name', 'class' => 'form-control', 'placeholder' =>'Your name')) !!}
 
                 </div>
               </div>
               <div class="row">
                 <div class="name col-lg-4">
-                  Электронная почта
+                  Email
                 </div>
                 <div class="input_block col-lg-8">
-                  {!! Form::text('email', old('email'), array('id' => 'email', 'class' => 'form-control', 'placeholder' => "example@olshansky.ua")) !!}
+                  {!! Form::text('email', old('email'), array('id' => 'email', 'class' => 'form-control', 'placeholder' => "example@mail.com")) !!}
 
                 </div>
               </div>
-              <h3 class="change_pass">Изменение пароля</h3>
-              <div class="row">
+              <h3 class="change_pass">Password</h3>
+              <div class="row form-group">
                 <div class="name col-lg-4">
-                  Придумайте новый пароль
+                  New password
                 </div>
                 <div class="input_block col-lg-8">
                   {!! Form::password('password', array('id' => 'user-new-pass', 'class' => 'form-control ', 'placeholder' => '')) !!}
 
                 </div>
               </div>
-              <div class="row">
+              <div class="row form-group">
                 <div class="name col-lg-4">
-                  Введите новый пароль ещё раз
+                  Repeat password
                 </div>
                 <div class="input_block col-lg-8">
                   {!! Form::password('password_confirmation', array('id' => 'user-new-pass-repeat', 'class' => 'form-control', 'placeholder' =>'')) !!}
-                  <br>
-                  <span>Пароль должен быть не менее 6 символов, содержать цифры и заглавные буквы и не должен совпадать с именем и эл. почтой</span>
+                  <span>Min password length 6 symbols</span>
                 </div>
               </div>
-
+              @ifUserIs('admin')
+              <div class="row form-group">
+                <div class="name col-lg-4">
+                  Select role
+                </div>
+                <div class="col-lg-8">
+                  <select name="role[]" id="roles" class="form-control" multiple="multiple">
+                    <?php foreach($allroles as $key => $role):?>
+                    <option value="{{ $key }}">{{ $role }}</option>
+                    <?php endforeach?>
+                  </select>
+                </div>
+              </div>
+              @endif
 
             </div>
           </div>
         </div>
-        {!! Form::button( Lang::get('forms.create_user_button_text'), array('class' => 'btn btn-success btn-flat margin-bottom-1 pull-right','type' => 'submit', )) !!}
+        <div class="row form-group">
+          <div class="col-md-8 col-offset-4">
+            {!! Form::button( 'save', array('class' => 'btn btn-success btn-flat margin-bottom-1 pull-right','type' => 'submit', )) !!}
+          </div>
+        </div>
 
         {!! Form::close() !!}
 
@@ -113,4 +107,13 @@
 @endsection
 
 @section('template_scripts')
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#roles').select2({
+        placeholder : 'Please select role',
+        tags: true
+      });
+    });
+  </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\VarDumper\VarDumper;
 use Validator;
 use App\User;
 use Auth;
@@ -47,7 +48,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('users.create-user');
+        $allroles = Role::pluck('name','id')->toArray();
+        return view('users.create-user')->with('allroles', $allroles);
     }
 
     /**
@@ -74,10 +76,12 @@ class UsersController extends Controller
             $user->name         = $request->input('name');
             $user->email        = $request->input('email');
             $user->password     = bcrypt($request->input('password'));
-            if ($request->input('image') != null) {
-                $user->image = $request->input('image');
-            }
             $user->save();
+            if ($request->input('role') != null) {
+                foreach ($request->input('role') as $role){
+                    $user->attachRole(Role::find($role));
+                }
+            }
             return redirect('users')->with('success', 'Successfully created user!');
         }
     }
@@ -105,8 +109,8 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $roles = $user->roles();
-        $allroles = Role::all();
+        $roles = $user->roles()->pluck('id')->toArray();
+        $allroles = Role::pluck('name','id')->toArray();
         return View('users.edit-user', compact('user', 'roles','allroles' ));
     }
 
@@ -122,11 +126,12 @@ class UsersController extends Controller
 
         $currentUser = Auth::user();
 //        $currentUser->attachRole(Role::find(1));
-//        $user        = User::find($id);
-
+        $user        = User::find($id);
         $emailCheck  = ($request->input('email') != '') && ($request->input('email') != $currentUser->email);
-        $passwordCheck  = ($request->input('old_password') != '') && (bcrypt($request->input('old_password')) != $user->password);
-
+        $passwordCheck = true;
+        if(!empty($request->input('old_password'))){
+            $passwordCheck = bcrypt($request->input('old_password')) != $user->password;
+        }
         if ($emailCheck) {
             $validator = Validator::make($request->all(), [
                 'name'      => 'required|max:255',
@@ -152,10 +157,17 @@ class UsersController extends Controller
             if ($request->input('password') != null) {
                 $user->password = bcrypt($request->input('password'));
             }
-            if ($request->input('image') != null) {
-                $user->image = $request->input('image');
-            }
+            if ($request->input('role') != null) {
 
+                $all_roles = Role::all();
+
+                foreach ($all_roles as $role){
+                    $user->detachRole($role->id);
+                }
+                foreach ($request->input('role') as $role){
+                    $user->attachRole(Role::find($role));
+                }
+            }
             $user->save();
             return back()->with('success', 'Successfully updated user');
         }

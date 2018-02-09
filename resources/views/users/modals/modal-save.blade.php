@@ -3,10 +3,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Сохранить </h4>
+        <h4 class="modal-title">Save </h4>
       </div>
       <div class="modal-body">
-        <p>Вы действительно хотите сохранить текущие изменения? </p>
+        <p>Are you sure want to save? </p>
       </div>
       <div class="modal-footer">
         {!! Form::button('<i class="fa fa-fw '.Lang::get('modals.confirm_modal_button_cancel_icon').'" aria-hidden="true"></i> ' . 'Отменить', array('class' => 'btn btn-outline pull-left btn-flat', 'type' => 'button', 'data-dismiss' => 'modal' )) !!}

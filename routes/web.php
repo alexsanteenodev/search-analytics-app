@@ -68,7 +68,7 @@ Route::group(array('prefix' => 'checker', 'middleware' => 'auth'), function()
             'index' => 'users',
             'destroy' => 'user.destroy'
         ]
-    ])->middleware('auth');
+    ])->middleware('role:admin');
 
 
 Route::group(array('prefix' => 'rbac', 'middleware' => 'auth'), function()
@@ -79,7 +79,7 @@ Route::group(array('prefix' => 'rbac', 'middleware' => 'auth'), function()
             'index' => 'roles',
             'destroy' => 'roles.destroy'
         ]
-    ])->middleware('auth');
+    ])->middleware('role:admin');
 
 
 });
@@ -89,6 +89,6 @@ Route::group(['middleware' => ['web']], function() {
     Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
     Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
     Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
-    Route::post('password.reques', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+    Route::post('password.request', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
 });
